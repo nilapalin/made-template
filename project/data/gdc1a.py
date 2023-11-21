@@ -120,7 +120,7 @@ def prepareData(jsondata):
     return demographics, diagnoses, pagination[0], pagination[1], pagination[2]
 
 def loadToSink(path: str, demographics, diagnoses):
-    con = sqlite3.connect('test_gdc.sqlite')
+    con = sqlite3.connect(path)
 
     df = pd.DataFrame([x.as_dict() for x in demographics])
     df.to_sql('demographic', con, if_exists='fail', index=False)
@@ -141,4 +141,4 @@ while hasNextPage:
     print("Aktuell: {}".format(len(demographics)))
     print("Noch Daten vorhanden: {}".format(hasNextPage))
 
-loadToSink("test_gdc.sqlite", demographics, diagnoses)
+loadToSink("../data/gdc.sqlite", demographics, diagnoses)

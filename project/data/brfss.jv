@@ -73,7 +73,7 @@ pipeline Brfss {
 
 	block BrfssLoader oftype SQLiteLoader {
 		table: "brfss";
-		file: "./brfss.sqlite";
+		file: "../data/brfss.sqlite";
 	}
  
 }
