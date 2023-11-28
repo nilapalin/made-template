@@ -5,21 +5,8 @@ import re
 class Verkehr(enum.Enum):
     FV = "FV"
     RV = "RV"
-    DPN = "DPN"
-
-#class Trainstop(Base):
+    DPN = "nur DPN"
 class Trainstop():
-    # __tablename__ = 'trainstops'
-    # _eva_nr = Column('EVA_NR', INTEGER, primary_key=True, nullable=False)
-    # _ds100 = Column('DS100', VARCHAR)
-    # _ifotp = Column('IFOPT', VARCHAR)
-    # _name = Column('NAME', VARCHAR)
-    # _verkehr = Column('Verkehr', Enum(Verkehr))
-    # _laenge = Column('Laenge', FLOAT)
-    # _breite = Column('Breite', FLOAT)
-    # _betreiber_name = Column('Betreiber_Name', VARCHAR)
-    # _betreiber_nr = Column('Betreiber_Nr', INTEGER)#, unique=True)
-    # #_status = Column('Status', String)
 
     def __init__(self, csv:dict):
         self.eva_nr = csv.get('EVA_NR')
@@ -31,7 +18,6 @@ class Trainstop():
         self.breite = csv.get('Breite')
         self.betreiber_name = csv.get('Betreiber_Name')
         self.betreiber_nr = csv.get('Betreiber_Nr')
-        #self.status = csv.get('Status')
 
     def as_dict(self):
         return {'EVA_NR': self._eva_nr, 'DS100': self._ds100, 'IFOPT': self._ifotp, 'NAME': self._name, 'Verkehr': self._verkehr, 'Laenge': self._laenge, 'Breite': self._breite, 'Betreiber_Name': self._betreiber_name, 'Betreiber_Nr': self._betreiber_nr}#, 'Status': self._status}
@@ -56,7 +42,7 @@ class Trainstop():
     @ifotp.setter
     def ifotp(self, ifotp:str):
         withNotEmpty(ifotp)
-        self._ifotp = withRegexp(ifotp, '^[a-zA-Z]{2}:\d*:\d*(;\d*)?$')
+        self._ifotp = withRegexp(ifotp, '^[a-zA-Z]{2}:\d*:\d*(:\d*)?$')
 
     @property
     def name(self):
