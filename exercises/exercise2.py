@@ -14,7 +14,7 @@ def load_trainstops_from_url(url):
             trainstop_list.append(Trainstop(row))
         except ValueError as e:
             count=count+1
-        except:
+        except Exception as e:
             count=count+1
     print("Amount of rows rejected: " + str(count))
     print("Amount of valid rows: " + str(len(trainstop_list)))

@@ -1,5 +1,4 @@
 import enum
-from locale import LC_NUMERIC, atof, setlocale
 import re
 
 class Verkehr(enum.Enum):
@@ -66,7 +65,7 @@ class Trainstop():
     def laenge(self, laenge):
         withNotEmpty(laenge)
         if (type(laenge) == str):
-            laenge = withLocaleForFloat(laenge, 'de-DE')
+            laenge = withDotInsteadOfCommaForFloat(laenge)
         self._laenge = withFloatBetweenInclusive(laenge, -90, 90)
 
     @property
@@ -76,7 +75,7 @@ class Trainstop():
     def breite(self, breite):
         withNotEmpty(breite)
         if (type(breite) == str):
-            breite = withLocaleForFloat(breite, 'de-DE')
+            breite = withDotInsteadOfCommaForFloat(breite)
         self._breite = withFloatBetweenInclusive(breite, -90, 90)
 
     @property
@@ -93,9 +92,8 @@ class Trainstop():
     def betreiber_nr(self, betreiber_nr:int):
         self._betreiber_nr = withNotEmpty(betreiber_nr)
 
-def withLocaleForFloat(value, locale):
-    setlocale(LC_NUMERIC, locale)
-    return atof(value)
+def withDotInsteadOfCommaForFloat(value):
+    return float(value.replace(',','.'))
 
 def withFloatBetweenInclusive(value:float, min:float, max:float):
     if (value >= min and value <= max):
