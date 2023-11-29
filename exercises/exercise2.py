@@ -1,3 +1,4 @@
+import sys
 import pandas as pd
 from sqlalchemy import create_engine
 from sqlalchemy.orm.session import sessionmaker
@@ -15,9 +16,9 @@ def load_trainstops_from_url(url):
         except ValueError as e:
             count=count+1
             print('Row could not be added due to invalid value: ' + str(e))
-        except:
+        except Exception as e:
             count=count+1
-            print('Row could not be added, error was thrown for row: ' + str(row))
+            print('Row could not be added, error was thrown for row: ' + str(row) + " Exception: "+ str(e))
     print("Amount of rows rejected: " + str(count))
     print("Amount of valid rows: " + str(len(trainstop_list)))
     return trainstop_list
