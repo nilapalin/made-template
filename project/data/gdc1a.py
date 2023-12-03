@@ -1,19 +1,27 @@
+import os
+from pathlib import Path
 import sqlite3
-import requests
 import json
+from urllib import request
+from urllib.parse import urlencode
 import pandas as pd
 
-from data import Demographic, Diagnosis
+def requestPost(url, data = {}, headers = {}):
+    data = urlencode(data).encode()
+    req = request.Request(url, data = data, method="POST")
+    
+    with request.urlopen(req) as response:
+        the_page = response.read()
+    if (response.reason == 'OK'):
+        return json.dumps(the_page.decode("utf-8"), indent=2)
+    else:
+        raise Exception(f"Query failed to run with a {response.status}.")
 
 def runGraphQLQuery(url, query, variables = {}, headers = {}):
     #accessToken = "xxx"
     #headers = {"Authorization": f"Bearer {accessToken}"}
-
-    r = requests.post(url, json={"query": query, 'variables': variables}, headers=headers)
-    if r.status_code == 200:
-        return json.dumps(r.json(), indent=2)
-    else:
-        raise Exception(f"Query failed to run with a {r.status_code}.")
+    data = requestPost(url, data = {"query": query, 'variables': variables}, headers = headers)
+    return data
 
 def runGDCGraphQLQuery(first=None, after=None):
     url = "https://api.gdc.cancer.gov/v0/graphql"
@@ -75,70 +83,85 @@ def runGDCGraphQLQuery(first=None, after=None):
     return runGraphQLQuery(url, query, variables)
 
 def prepareData(jsondata):
-    jsonObject = json.loads(jsondata)
-
-    demographics = []
-    diagnoses = []
-    pagination = [None]*3
-
-    def recursive_iter(obj, keys=()):
-        if isinstance(obj, dict):
-            for k, v in obj.items():
-                if "demographic" == k:
-                    demographics.append(Demographic())
-                if "diagnoses" == k:
-                    diagnoses.append(Diagnosis())
-                recursive_iter(v, keys + (k,))
-        elif any(isinstance(obj, t) for t in (list, tuple)):
-            for idx, item in enumerate(obj):
-                recursive_iter(item, keys + (idx,))
-        else:
-            attr = keys[len(keys)-1]
-            if "demographic" in keys:
-                objDemo = demographics[len(demographics)-1]
-                if "age_at_index" == attr:
-                    objDemo.age_at_index = obj
-            if "diagnoses" in keys:
-                objDiag = diagnoses[len(diagnoses)-1]
-                if "ajcc_pathologic_t" == attr:
-                    objDiag.ajcc_pathologic_t = obj
-                if "ajcc_pathologic_n" == attr:
-                    objDiag.ajcc_pathologic_n = obj
-                if "ajcc_pathologic_m" == attr:
-                    objDiag.ajcc_pathologic_m = obj
-            if "id" == attr:
-                demographics[len(demographics)-1].case_id = obj
-                diagnoses[len(diagnoses)-1].case_id = obj
-            if "total" == attr:
-                pagination[0] = obj
-            if "hasNextPage" == attr:
-                pagination[1] = obj
-            if "endCursor" == attr:
-                pagination[2] = obj
-
-    recursive_iter(jsonObject)
-    return demographics, diagnoses, pagination[0], pagination[1], pagination[2]
-
-def loadToSink(path: str, demographics, diagnoses):
-    con = sqlite3.connect(path)
-
-    df = pd.DataFrame([x.as_dict() for x in demographics])
-    df.to_sql('demographic', con, if_exists='fail', index=False)
-    df = pd.DataFrame([x.as_dict() for x in diagnoses])
-    df.to_sql('diagnoses', con, if_exists='fail', index=False)
+    js = json.loads(json.loads(jsondata))#TODO not clear yet why twice json.loads
     
+    edges = js.get('data').get('explore').get('cases').get('hits').get('edges')
+    diagnoses_data = []
+    demographics_data = []
+    case_data = []
+    for edge in edges:
+        id = edge.get('node').get('id')
+        case_dict={}
+        case_dict['id'] = id
+        case_dict['index_date'] = edge.get('node').get('index_date')
+        case_dict['primary_site'] = edge.get('node').get('primary_site')
+        case_dict['disease_type'] = edge.get('node').get('disease_type')
+        
+        #{"node":{"demographic":{"age_
+        demographic = edge.get('node').get('demographic')
+        demographic_dict={}
+        demographic_dict['case_id'] = id
+        demographic_dict['age_at_index']=demographic.get('age_at_index')
+        demographic_dict['days_to_birth']=demographic.get('days_to_birth')
+        demographic_dict['days_to_death']=demographic.get('days_to_death')
+        demographic_dict['cause_of_death']=demographic.get('cause_of_death')
+        demographic_dict['cause_of_death_source']=demographic.get('cause_of_death_source')
+        demographic_dict['country_of_residence_at_enrollment']=demographic.get('country_of_residence_at_enrollment')
+        demographic_dict['state']=demographic.get('state')
+        demographic_dict['vital_status']=demographic.get('vital_status')
+        
+        #{"node":{"diagnoses":{"hits":{"edges":[{"node":{"aj...
+        diagnoses_edge = edge.get('node').get('diagnoses').get('hits').get('edges')
+        for diagnosis_edge in diagnoses_edge:
+            diagnosis_dict={}
+            diagnosis = diagnosis_edge.get('node')
+            diagnosis_dict['case_id'] = id
+            diagnosis_dict['ajcc_clinical_m']=diagnosis.get('ajcc_clinical_m')
+            diagnosis_dict['ajcc_clinical_t']=diagnosis.get('ajcc_clinical_t')
+            diagnosis_dict['ajcc_clinical_n']=diagnosis.get('ajcc_clinical_n')
+            diagnosis_dict['ajcc_clinical_m']=diagnosis.get('ajcc_clinical_m')
+            diagnosis_dict['ajcc_clinical_stage']=diagnosis.get('ajcc_clinical_stage')
+            diagnosis_dict['ajcc_pathologic_t']=diagnosis.get('ajcc_pathologic_t')
+            diagnosis_dict['ajcc_pathologic_n']=diagnosis.get('ajcc_pathologic_n')
+            diagnosis_dict['ajcc_pathologic_m']=diagnosis.get('ajcc_pathologic_m')
+            diagnosis_dict['ajcc_pathologic_stage']=diagnosis.get('ajcc_pathologic_stage')
+                            
+        demographics_data.append(demographic_dict)
+        diagnoses_data.append(diagnosis_dict)
+        case_data.append(case_dict)
+    total = js.get('data').get('explore').get('cases').get('hits').get('total')
+    hasNextPage = js.get('data').get('explore').get('cases').get('hits').get('pageInfo').get('hasNextPage')
+    endCursor = js.get('data').get('explore').get('cases').get('hits').get('pageInfo').get('endCursor')
+    return case_data, demographics_data, diagnoses_data, total, hasNextPage, endCursor
+
+def get_project_root() -> Path:
+    return Path(__file__).parent.parent.parent
+
+def loadToSink(path: str, data, tablename):
+    con = sqlite3.connect(path)
+    con.execute('drop table if exists {}'.format(tablename))
+    df = pd.DataFrame(data)
+    df.to_sql(tablename, con, if_exists='fail', index=False)
     con.commit()
     con.close()
 
-response = runGDCGraphQLQuery(100) #run first 100 samples, get also pagination information, details see https://graphql.org/learn/pagination/
-demographics, diagnoses, total, hasNextPage, endCursor = prepareData(response)
-while hasNextPage:
-    response = runGDCGraphQLQuery(500, endCursor)
-    tmp_demographics, tmp_diagnoses, total, hasNextPage, endCursor = prepareData(response)
-    demographics = demographics + tmp_demographics
-    diagnoses = diagnoses + tmp_diagnoses
-    print("Total: {}".format(total))
-    print("Aktuell: {}".format(len(demographics)))
-    print("Noch Daten vorhanden: {}".format(hasNextPage))
+def runPipeline():
+    response = runGDCGraphQLQuery(100) #run first 100 samples, get also pagination information, details see https://graphql.org/learn/pagination/
+    cases, demographics, diagnoses, total, hasNextPage, endCursor = prepareData(response)
+    while hasNextPage:
+        response = runGDCGraphQLQuery(1000, endCursor)
+        tmp_cases, tmp_demographics, tmp_diagnoses, total, hasNextPage, endCursor = prepareData(response)
+        demographics = demographics + tmp_demographics
+        diagnoses = diagnoses + tmp_diagnoses
+        cases = cases + tmp_cases
+        print("Total: {}".format(total))
+        print("Aktuell: {}".format(len(demographics)))
+        print("Noch Daten vorhanden: {}".format(hasNextPage))
+    path = os.path.join(get_project_root(), 'data/gdc.sqlite')
+    loadToSink(path, cases, 'cases')
+    loadToSink(path, demographics, 'demographics')
+    loadToSink(path, diagnoses, 'diagnoses')
+    return total, path
 
-loadToSink("../data/gdc.sqlite", demographics, diagnoses)
+if __name__ == '__main__':
+    runPipeline()
