@@ -145,7 +145,7 @@ def loadToSink(path: str, data, tablename):
     con.commit()
     con.close()
 
-if __name__ == '__main__':
+def runPipeline():
     response = runGDCGraphQLQuery(100) #run first 100 samples, get also pagination information, details see https://graphql.org/learn/pagination/
     cases, demographics, diagnoses, total, hasNextPage, endCursor = prepareData(response)
     while hasNextPage:
@@ -161,3 +161,7 @@ if __name__ == '__main__':
     loadToSink(path, cases, 'cases')
     loadToSink(path, demographics, 'demographics')
     loadToSink(path, diagnoses, 'diagnoses')
+    return total, path
+
+if __name__ == '__main__':
+    runPipeline()
