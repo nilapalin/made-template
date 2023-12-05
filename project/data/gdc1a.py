@@ -97,6 +97,7 @@ class Gdc1aPipeline:
             case_dict['index_date'] = edge.get('node').get('index_date')
             case_dict['primary_site'] = edge.get('node').get('primary_site')
             case_dict['disease_type'] = edge.get('node').get('disease_type')
+            case_data.append(case_dict)
             
             #{"node":{"demographic":{"age_
             demographic = edge.get('node').get('demographic')
@@ -110,6 +111,7 @@ class Gdc1aPipeline:
             demographic_dict['country_of_residence_at_enrollment']=demographic.get('country_of_residence_at_enrollment')
             demographic_dict['state']=demographic.get('state')
             demographic_dict['vital_status']=demographic.get('vital_status')
+            demographics_data.append(demographic_dict)
             
             #{"node":{"diagnoses":{"hits":{"edges":[{"node":{"aj...
             diagnoses_edge = edge.get('node').get('diagnoses').get('hits').get('edges')
@@ -120,16 +122,13 @@ class Gdc1aPipeline:
                 diagnosis_dict['ajcc_clinical_m']=diagnosis.get('ajcc_clinical_m')
                 diagnosis_dict['ajcc_clinical_t']=diagnosis.get('ajcc_clinical_t')
                 diagnosis_dict['ajcc_clinical_n']=diagnosis.get('ajcc_clinical_n')
-                diagnosis_dict['ajcc_clinical_m']=diagnosis.get('ajcc_clinical_m')
                 diagnosis_dict['ajcc_clinical_stage']=diagnosis.get('ajcc_clinical_stage')
                 diagnosis_dict['ajcc_pathologic_t']=diagnosis.get('ajcc_pathologic_t')
                 diagnosis_dict['ajcc_pathologic_n']=diagnosis.get('ajcc_pathologic_n')
                 diagnosis_dict['ajcc_pathologic_m']=diagnosis.get('ajcc_pathologic_m')
                 diagnosis_dict['ajcc_pathologic_stage']=diagnosis.get('ajcc_pathologic_stage')
-                                
-            demographics_data.append(demographic_dict)
-            diagnoses_data.append(diagnosis_dict)
-            case_data.append(case_dict)
+                diagnoses_data.append(diagnosis_dict)
+            
         total = js.get('data').get('explore').get('cases').get('hits').get('total')
         hasNextPage = js.get('data').get('explore').get('cases').get('hits').get('pageInfo').get('hasNextPage')
         endCursor = js.get('data').get('explore').get('cases').get('hits').get('pageInfo').get('endCursor')
