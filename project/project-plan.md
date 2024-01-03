@@ -107,6 +107,24 @@ Evaluation:
     https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6226269/ MC4R and LEPR
     MC4R (melanocortin 4 receptor): https://portal.gdc.cancer.gov/genes/ENSG00000166603
     https://de.wikipedia.org/wiki/Melanocortin-4-Rezeptor 'Ferner unterdrückt er das Hungergefühl'
-        
 
+
+Hypothesis:
+If we can see changes in the values of obesity in every year, this will be somehow reflected in the cancer numbers (esp. with the MC4R mutations).
+1. show changing data in obesity within brfss data of the last 10 or so years
+    LocationDesc == National
+    Class == Obesity / Weight Status
+    Total == Total
+
+    LocationDesc == National
+    Class == Obesity / Weight Status
+    Gender == Male or Female
+
+    LocationDesc == National
+    Class == Obesity / Weight Status
+    Age(years) == 25 - 34 or 35 - 44 or 45 - 54 or 55 - 64 or 65 or older
+
+   
+2. show data of cancer cases with and without mutations from gdc over the last 10 or so years (MC4R mutations only relevant 2010-2018)    
+3. bring 1. and 2. together and show possible correlations
 -->

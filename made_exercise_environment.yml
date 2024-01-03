@@ -1,4 +1,4 @@
-name: MADE
+name: MADE_EX
 channels:
   - defaults
 dependencies:
