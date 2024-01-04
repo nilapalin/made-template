@@ -139,4 +139,22 @@ If we can see changes in the values of obesity in every year, this will be someh
    
 2. show data of cancer cases with and without mutations from gdc over the last 10 or so years (MC4R mutations only relevant 2010-2018)    
 3. bring 1. and 2. together and show possible correlations
+
+Problem: no information of completeness in gdc data -> cancer registries
+therefore use the outcome with caution and carefulness
+
+4. add more genes to the bin:
+    https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8459824/
+    SIM1
+    POMC
+    LEPR
+    MRAP2
+    ADCY3
+    NTRK2
+    MC4R
+    KSR2
+    LEP
+    PCSK1
+    BDNF
+    SH2B1
 -->

@@ -55,7 +55,9 @@ class Gdc1aPipeline:
                     ajcc_pathologic_t,
                     ajcc_pathologic_n,
                     ajcc_pathologic_m,
-                    ajcc_pathologic_stage
+                    ajcc_pathologic_stage,
+                    year_of_diagnosis,
+                    age_at_diagnosis
                   }
                 }
               }
@@ -108,7 +110,7 @@ class Gdc1aPipeline:
                     "op": "=",
                     "content": {
                         "field": "gene.symbol",
-                        "value": ["MC4R","LEPR"]
+                        "value": ["SIM1","POMC","LEPR","MRAP2","ADCY3","NTRK2","MC4R","KSR2","LEP","PCSK1","BDNF","SH2B1"]
                     }
                 }
             }
@@ -130,29 +132,58 @@ class Gdc1aPipeline:
             case_dict['primary_site'] = edge.get('node').get('primary_site')
             case_dict['disease_type'] = edge.get('node').get('disease_type')
             gene_edges = edge.get('node').get('gene').get('hits').get('edges')
-            mc4r = False
-            lepr = False
+            sim1 = pomc = lepr = mrap2 = adcy3 = ntrk2 = mc4r = ksr2 = lep = pcsk1 = bdnf = sh2b1 = False
             for gene_edge in gene_edges:
-                if(gene_edge.get('node').get('symbol') == 'MC4R'):
-                    mc4r = True
+                if(gene_edge.get('node').get('symbol') == 'SIM1'):
+                  sim1 = True
+                if(gene_edge.get('node').get('symbol') == 'POMC'):
+                  pomc = True
                 if(gene_edge.get('node').get('symbol') == 'LEPR'):
-                    lepr = True
-            case_dict['gene.MC4R'] = mc4r
+                  lepr = True
+                if(gene_edge.get('node').get('symbol') == 'MRAP2'):
+                  mrap2 = True
+                if(gene_edge.get('node').get('symbol') == 'ADCY3'):
+                  adcy3 = True
+                if(gene_edge.get('node').get('symbol') == 'NTRK2'):
+                  ntrk2 = True
+                if(gene_edge.get('node').get('symbol') == 'MC4R'):
+                  mc4r = True
+                if(gene_edge.get('node').get('symbol') == 'KSR2'):
+                  ksr2 = True
+                if(gene_edge.get('node').get('symbol') == 'LEP'):
+                  lep = True
+                if(gene_edge.get('node').get('symbol') == 'PCSK1'):
+                  pcsk1 = True
+                if(gene_edge.get('node').get('symbol') == 'BDNF'):
+                  bdnf = True
+                if(gene_edge.get('node').get('symbol') == 'SH2B1'):
+                  sh2b1 = True
+            case_dict['gene.SIM1'] = sim1
+            case_dict['gene.POMC'] = pomc 
             case_dict['gene.LEPR'] = lepr
+            case_dict['gene.MRAP2'] = mrap2
+            case_dict['gene.ADCY3'] = adcy3
+            case_dict['gene.NTRK2'] = ntrk2
+            case_dict['gene.MC4R'] = mc4r
+            case_dict['gene.KSR2'] = ksr2
+            case_dict['gene.LEP'] = lep
+            case_dict['gene.PCSK1'] = pcsk1
+            case_dict['gene.BDNF'] = bdnf
+            case_dict['gene.SH2B1'] = sh2b1
             case_data.append(case_dict)
             
             #{"node":{"demographic":{"age_
             demographic = edge.get('node').get('demographic')
             demographic_dict={}
             demographic_dict['case_id'] = id
-            demographic_dict['age_at_index']=demographic.get('age_at_index')
-            demographic_dict['days_to_birth']=demographic.get('days_to_birth')
-            demographic_dict['days_to_death']=demographic.get('days_to_death')
-            demographic_dict['cause_of_death']=demographic.get('cause_of_death')
-            demographic_dict['cause_of_death_source']=demographic.get('cause_of_death_source')
-            demographic_dict['country_of_residence_at_enrollment']=demographic.get('country_of_residence_at_enrollment')
-            demographic_dict['state']=demographic.get('state')
-            demographic_dict['vital_status']=demographic.get('vital_status')
+            demographic_dict['age_at_index'] = demographic.get('age_at_index')
+            demographic_dict['days_to_birth'] = demographic.get('days_to_birth')
+            demographic_dict['days_to_death'] = demographic.get('days_to_death')
+            demographic_dict['cause_of_death'] = demographic.get('cause_of_death')
+            demographic_dict['cause_of_death_source'] = demographic.get('cause_of_death_source')
+            demographic_dict['country_of_residence_at_enrollment'] = demographic.get('country_of_residence_at_enrollment')
+            demographic_dict['state'] = demographic.get('state')
+            demographic_dict['vital_status'] = demographic.get('vital_status')
             demographics_data.append(demographic_dict)
             
             #{"node":{"diagnoses":{"hits":{"edges":[{"node":{"aj...
@@ -161,14 +192,17 @@ class Gdc1aPipeline:
                 diagnosis_dict={}
                 diagnosis = diagnosis_edge.get('node')
                 diagnosis_dict['case_id'] = id
-                diagnosis_dict['ajcc_clinical_m']=diagnosis.get('ajcc_clinical_m')
-                diagnosis_dict['ajcc_clinical_t']=diagnosis.get('ajcc_clinical_t')
-                diagnosis_dict['ajcc_clinical_n']=diagnosis.get('ajcc_clinical_n')
-                diagnosis_dict['ajcc_clinical_stage']=diagnosis.get('ajcc_clinical_stage')
-                diagnosis_dict['ajcc_pathologic_t']=diagnosis.get('ajcc_pathologic_t')
-                diagnosis_dict['ajcc_pathologic_n']=diagnosis.get('ajcc_pathologic_n')
-                diagnosis_dict['ajcc_pathologic_m']=diagnosis.get('ajcc_pathologic_m')
-                diagnosis_dict['ajcc_pathologic_stage']=diagnosis.get('ajcc_pathologic_stage')
+                diagnosis_dict['year_of_diagnosis'] = diagnosis.get('year_of_diagnosis')
+                diagnosis_dict['age_at_diagnosis_days'] = diagnosis.get('age_at_diagnosis')
+                diagnosis_dict['age_at_diagnosis_years'] = (int)(diagnosis.get('age_at_diagnosis') / 365.25) #https://docs.gdc.cancer.gov/Data_Portal/Users_Guide/Advanced_Search/#age-at-diagnosis-unit-in-days
+                diagnosis_dict['ajcc_clinical_m'] = diagnosis.get('ajcc_clinical_m')
+                diagnosis_dict['ajcc_clinical_t'] = diagnosis.get('ajcc_clinical_t')
+                diagnosis_dict['ajcc_clinical_n'] = diagnosis.get('ajcc_clinical_n')
+                diagnosis_dict['ajcc_clinical_stage'] = diagnosis.get('ajcc_clinical_stage')
+                diagnosis_dict['ajcc_pathologic_t'] = diagnosis.get('ajcc_pathologic_t')
+                diagnosis_dict['ajcc_pathologic_n'] = diagnosis.get('ajcc_pathologic_n')
+                diagnosis_dict['ajcc_pathologic_m'] = diagnosis.get('ajcc_pathologic_m')
+                diagnosis_dict['ajcc_pathologic_stage'] = diagnosis.get('ajcc_pathologic_stage')
                 diagnoses_data.append(diagnosis_dict)
             
         total = js.get('data').get('explore').get('cases').get('hits').get('total')
