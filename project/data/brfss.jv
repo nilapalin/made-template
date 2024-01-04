@@ -17,6 +17,8 @@ pipeline Brfss {
 
 	block BrfssCSVInterpreter oftype CSVInterpreter {
 		delimiter: ',';
+		enclosing: '"';
+		enclosingEscape: '"';
 	}
  
 	block BrfssTableInterpreter oftype TableInterpreter {
@@ -37,14 +39,14 @@ pipeline Brfss {
 			"Data_Value_Footnote_Symbol" oftype text,
 			"Data_Value_Footnote" oftype text,
 			"Low_Confidence_Limit" oftype text,//decimal,
-			"High_Confidence_Limit" oftype text,//decimal,
+			"High_Confidence_Limit " oftype text,//decimal,
 			"Sample_Size" oftype text,//integer,
 			"Total" oftype text,
-			"Age_years" oftype text,
+			"Age(years)" oftype text,
 			"Education" oftype text,
 			"Gender" oftype text,
 			"Income" oftype text,
-			"Race_Ethnicity" oftype text,
+			"Race/Ethnicity" oftype text,
 			"GeoLocation" oftype text,
 			"ClassID" oftype text,
 			"TopicID" oftype text,
