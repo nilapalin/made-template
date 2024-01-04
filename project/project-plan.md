@@ -108,9 +108,21 @@ Evaluation:
     MC4R (melanocortin 4 receptor): https://portal.gdc.cancer.gov/genes/ENSG00000166603
     https://de.wikipedia.org/wiki/Melanocortin-4-Rezeptor 'Ferner unterdrückt er das Hungergefühl'
 
+Problem:
+Even though the GDC Datasource has a field for exposure weight or BMI, it is not filled in any of their datasets. Therefore, it is not possible to link the obesity numbers of BRFSS dataset to the cancer in general. For this report, a deeper evaluation is used and hence the following assumption is used:
+- Genes MC4R and LEPR are involved in exposure of obesity
+- Cancer with documented mutations in MC4R and LEPR could be associated to obesity
+This are very weak assumptions and I would highly value if there would be a possibility in furture to either add obesity identifying data (like BMI) to cancer data or to make it possible to connect datasets (like in other studies e.g. NAKO (Nationale Gesundheitsstudie) which is not open data)
+
+Also the GDC data is from different countries (united states, canada, ...). Since a lot of data sets are without any specification on that field (country of residence at enrollment), for reasons of ease for that project this is ignored. (TODO: check)
+
+Changes in genes can be harmful but can also be without or with low consequences. Therefore a further view could be to evaluate the impact of the DNA changes.
+
+All the evaluation is not complete since it is on data which potentially be incomplete since the projects are not forced to deliver. In Germany there is a law for delivering cancer related data, however, it only contains a very limited subset of information which GDC is providing.
+
 
 Hypothesis:
-If we can see changes in the values of obesity in every year, this will be somehow reflected in the cancer numbers (esp. with the MC4R mutations).
+If we can see changes in the values of obesity in every year, this will be somehow reflected in the cancer numbers (esp. with the MC4R and LEPR mutations).
 1. show changing data in obesity within brfss data of the last 10 or so years
     LocationDesc == National
     Class == Obesity / Weight Status

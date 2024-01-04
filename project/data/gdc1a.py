@@ -29,58 +29,90 @@ class Gdc1aPipeline:
         case_hit_first = "hits (filters: $filters_cases) "
         case_hit_next = """hits (filters: $filters_cases, first: {}, after: "{}") """.format(first, after)
         query1 = """
-            query getgdcdata($filters_cases: FiltersArgument, $filters_diagnoses: FiltersArgument) {
+            query getgdcdata($filters_cases: FiltersArgument, $filters_diagnoses: FiltersArgument, $filters_genes: FiltersArgument) {
             explore {
                 cases {"""
         query2 = """{
                 total
-                pageInfo {
-                    endCursor
-                    hasNextPage
-                }            
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+        edges {
+          node {
+            id,
+            index_date,
+            primary_site,
+            disease_type,
+            diagnoses {
+               hits (filters: $filters_diagnoses) {
                 edges {
-                    node {
-                        id,
-                        index_date,
-                        primary_site,
-                        disease_type,
-                        diagnoses {
-                        hits (filters: $filters_diagnoses) {
-                            edges {
-                            node {
-                                ajcc_clinical_t,
-                                ajcc_clinical_n,
-                                ajcc_clinical_m,
-                                ajcc_clinical_stage,
-                                ajcc_pathologic_t,
-                                ajcc_pathologic_n,
-                                ajcc_pathologic_m,
-                                ajcc_pathologic_stage
-                            }
-                            }
-                        }
-                        },
-                        demographic {
-                        age_at_index,
-                        days_to_birth,
-                        days_to_death,
-                        cause_of_death,
-                        cause_of_death_source,
-                        country_of_residence_at_enrollment,
-                        state,
-                        vital_status
-                        }
-                    }
-                    }
-                } 
+                  node {
+                    ajcc_clinical_t,
+                    ajcc_clinical_n,
+                    ajcc_clinical_m,
+                    ajcc_clinical_stage,
+                    ajcc_pathologic_t,
+                    ajcc_pathologic_n,
+                    ajcc_pathologic_m,
+                    ajcc_pathologic_stage
+                  }
                 }
+              }
+            },
+            demographic {
+              age_at_index,
+              days_to_birth,
+              days_to_death,
+              cause_of_death,
+              cause_of_death_source,
+              country_of_residence_at_enrollment,
+              state,
+              vital_status
+            },
+            gene {
+              hits (filters: $filters_genes) {
+                total
+                pageInfo {
+                  endCursor
+                  hasNextPage
+                }
+                edges {
+                  node {
+                    symbol,
+                    biotype
+                    }
+                }
+              }  
             }
-            }
+          }
+        }
+      } 
+    }
+  }
+}
         """
         query = query1+case_hit_first+query2
         if (after):
             query = query1+case_hit_next+query2
-        variables = """{"filters_cases": {"op": "in", "content": {"field": "primary_site", "value": ["Kidney"]}}, "filsters_diagnoses": {}}"""
+        variables = """
+            {
+                "filters_cases": {
+                    "op": "in", 
+                    "content": {
+                        "field": "demographic.country_of_residence_at_enrollment",
+                        "value": ["united states"]
+                    }
+                }, 
+                "filters_genes": {
+                    "op": "=",
+                    "content": {
+                        "field": "gene.symbol",
+                        "value": ["MC4R","LEPR"]
+                    }
+                }
+            }
+            """
         return self.runGraphQLQuery(url, query, variables)
 
     def prepareData(self, jsondata):
@@ -97,6 +129,16 @@ class Gdc1aPipeline:
             case_dict['index_date'] = edge.get('node').get('index_date')
             case_dict['primary_site'] = edge.get('node').get('primary_site')
             case_dict['disease_type'] = edge.get('node').get('disease_type')
+            gene_edges = edge.get('node').get('gene').get('hits').get('edges')
+            mc4r = False
+            lepr = False
+            for gene_edge in gene_edges:
+                if(gene_edge.get('node').get('symbol') == 'MC4R'):
+                    mc4r = True
+                if(gene_edge.get('node').get('symbol') == 'LEPR'):
+                    lepr = True
+            case_dict['gene.MC4R'] = mc4r
+            case_dict['gene.LEPR'] = lepr
             case_data.append(case_dict)
             
             #{"node":{"demographic":{"age_
