@@ -6,7 +6,7 @@ dependencies:
   # own dependencies
     - python=3.11.5
     - nodejs
-    #- jupyter
+    - jupyter
     - pip
     - pip:
         - attrs==22.2.0
