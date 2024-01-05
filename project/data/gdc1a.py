@@ -100,18 +100,22 @@ class Gdc1aPipeline:
         variables = """
             {
                 "filters_cases": {
-                    "op": "in", 
-                    "content": {
-                        "field": "demographic.country_of_residence_at_enrollment",
-                        "value": ["united states"]
-                    }
-                }, 
+                  "op": "and",
+                  "content": [
+                    {
+                      "op": ">",
+                      "content": {
+                        "field": "diagnoses.age_at_diagnosis",
+                        "value": [6400]
+                      }}
+                  ]
+                  },
                 "filters_genes": {
-                    "op": "=",
-                    "content": {
-                        "field": "gene.symbol",
-                        "value": ["SIM1","POMC","LEPR","MRAP2","ADCY3","NTRK2","MC4R","KSR2","LEP","PCSK1","BDNF","SH2B1"]
-                    }
+                  "op": "IN",
+                  "content": {
+                      "field": "gene.symbol",
+                      "value": ["SIM1","POMC","LEPR","MRAP2","ADCY3","NTRK2","MC4R","KSR2","LEP","PCSK1","BDNF","SH2B1"]
+                  }
                 }
             }
             """
@@ -193,8 +197,11 @@ class Gdc1aPipeline:
                 diagnosis = diagnosis_edge.get('node')
                 diagnosis_dict['case_id'] = id
                 diagnosis_dict['year_of_diagnosis'] = diagnosis.get('year_of_diagnosis')
-                diagnosis_dict['age_at_diagnosis_days'] = diagnosis.get('age_at_diagnosis')
-                diagnosis_dict['age_at_diagnosis_years'] = (int)(diagnosis.get('age_at_diagnosis') / 365.25) #https://docs.gdc.cancer.gov/Data_Portal/Users_Guide/Advanced_Search/#age-at-diagnosis-unit-in-days
+                aad = diagnosis.get('age_at_diagnosis')
+                diagnosis_dict['age_at_diagnosis_days'] = aad
+                if (aad):
+                   aad = round(aad/365.25)
+                diagnosis_dict['age_at_diagnosis_years'] = aad #https://docs.gdc.cancer.gov/Data_Portal/Users_Guide/Advanced_Search/#age-at-diagnosis-unit-in-days
                 diagnosis_dict['ajcc_clinical_m'] = diagnosis.get('ajcc_clinical_m')
                 diagnosis_dict['ajcc_clinical_t'] = diagnosis.get('ajcc_clinical_t')
                 diagnosis_dict['ajcc_clinical_n'] = diagnosis.get('ajcc_clinical_n')
