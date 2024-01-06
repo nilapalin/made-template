@@ -160,6 +160,9 @@ or disease_type (multi-class classification)
 
 Data: use data from year 2011 which is available in both brfss and gdc
 
+Ressource for Logistic Regression and nice seaborn plots:
+https://medium.com/analytics-vidhya/logistic-regression-in-python-using-pandas-and-seaborn-for-beginners-in-ml-64eaf0f208d2
+
 
 4. add more genes to the bin:
     https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8459824/
