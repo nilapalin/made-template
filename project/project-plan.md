@@ -138,10 +138,28 @@ If we can see changes in the values of obesity in every year, this will be someh
 
    
 2. show data of cancer cases with and without mutations from gdc over the last 10 or so years (MC4R mutations only relevant 2010-2018)    
+
 3. bring 1. and 2. together and show possible correlations
 
 Problem: no information of completeness in gdc data -> cancer registries
 therefore use the outcome with caution and carefulness
+
+Do a classification task:
+Features (X):
+brfss.age_group.obesity
+brfss.age_group.overweight
+brfss.age_group.physical training
+gdc.case.age_at_diagnosis
+gdc.case.gene mutations
+(gdc.case.pTNM.T/N/M)
+
+Classification (y):
+specific gene mutated (binary classification)
+or primary_site of cancer (multi-class classification)
+or disease_type (multi-class classification)
+
+Data: use data from year 2011 which is available in both brfss and gdc
+
 
 4. add more genes to the bin:
     https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8459824/

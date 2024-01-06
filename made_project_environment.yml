@@ -26,5 +26,6 @@ dependencies:
     - nodejs
     - jupyter
     - seaborn
+    - scikit-learn
     # - pip:
     #   - tensorflow
