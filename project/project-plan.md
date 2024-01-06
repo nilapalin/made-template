@@ -178,4 +178,8 @@ https://medium.com/analytics-vidhya/logistic-regression-in-python-using-pandas-a
     PCSK1
     BDNF
     SH2B1
+
+Interpretation classification report:
+https://databasecamp.de/statistik/f1-score
+
 -->
