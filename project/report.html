@@ -94,23 +94,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<div class="cell" data-execution_count="59">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sqlalchemy</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np </span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib <span class="im">as</span> mpl</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.ticker <span class="im">as</span> mtick</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> classification_report, roc_curve, auc, roc_auc_score</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">#use provided anaconda environment file: made_project_environment.yml to setup an environment for this file</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>warnings.simplefilter(action<span class="op">=</span><span class="st">'ignore'</span>, category<span class="op">=</span><span class="pp">FutureWarning</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="80">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sqlalchemy</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> classification_report, roc_curve, auc, roc_auc_score</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>warnings.simplefilter(action<span class="op">=</span><span class="st">'ignore'</span>, category<span class="op">=</span><span class="pp">FutureWarning</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">#use provided anaconda environment file: made_project_environment.yml to setup an environment for this file</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
@@ -212,7 +208,7 @@ The following genes were checked in the download of the GDC data and if availabl
 <section id="data-availability-in-gdc" class="level4">
 <h4 class="anchored" data-anchor-id="data-availability-in-gdc">Data availability in GDC</h4>
 <p>The data in GDC shows that there are gaps and the cancer data is definitly not complete. This is clear since submitters are not forced to provide the data and only a subset of data is stored at GDC and open to the public.</p>
-<div class="cell" data-execution_count="42">
+<div class="cell" data-execution_count="81">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>dbEngine<span class="op">=</span>sqlalchemy.create_engine(<span class="st">'sqlite:///../data/gdc.sqlite'</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> dbEngine.<span class="ex">connect</span>() <span class="im">as</span> conn:</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    sqlstatement_obese <span class="op">=</span> <span class="st">"select year_of_diagnosis, count(*) as c from diagnoses where year_of_diagnosis is not null group by year_of_diagnosis"</span></span>
@@ -262,7 +258,7 @@ The following genes were checked in the download of the GDC data and if availabl
 <section id="correlation-1" class="level3">
 <h3 class="anchored" data-anchor-id="correlation-1">Correlation</h3>
 <p>The BRFSS data in years 2011 to 2022:</p>
-<div class="cell" data-execution_count="43">
+<div class="cell" data-execution_count="82">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>dbEngine<span class="op">=</span>sqlalchemy.create_engine(<span class="st">'sqlite:///../data/brfss.sqlite'</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> dbEngine.<span class="ex">connect</span>() <span class="im">as</span> conn:</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    sqlstatement_obese <span class="op">=</span> <span class="st">"select YearStart, Data_Value, </span><span class="ch">\"</span><span class="st">Age(years)</span><span class="ch">\"</span><span class="st">  from brfss where LocationDesc = 'National' and Total = 'Total' and Question like '%aged 18 years and older who have obesity' order by YearStart"</span></span>
@@ -301,7 +297,7 @@ The following genes were checked in the download of the GDC data and if availabl
 </div>
 </div>
 <p>GDC data and its increase in entries of genes with mutations. Genes as referred to the selected genes related to obesity, see <a href="#genes">Data pipeline-Transformation-Genes</a>.</p>
-<div class="cell" data-execution_count="60">
+<div class="cell" data-execution_count="83">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>dbEngine<span class="op">=</span>sqlalchemy.create_engine(<span class="st">'sqlite:///../data/gdc.sqlite'</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> dbEngine.<span class="ex">connect</span>() <span class="im">as</span> conn:</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    sqlstatement_obese <span class="op">=</span> <span class="st">"select year_of_diagnosis, count(*) as nrdiag, sum(sim), sum(p), sum(lpr), sum(mr), sum(a), sum(n), sum(m), sum(k), sum(l), sum(pc), sum(b), sum(s), sum(sim)+sum(p)+sum(lpr)+sum(mr)+sum(a)+sum(n)+sum(m)+sum(k)+sum(l)+sum(pc)+sum(b)+sum(s) as gene_sum, (sum(sim)+sum(p)+sum(lpr)+sum(mr)+sum(a)+sum(n)+sum(m)+sum(k)+sum(l)+sum(pc)+sum(b)+sum(s))/count(*) as gene_sum_per_nrdiag from (select d.year_of_diagnosis, c.</span><span class="ch">\"</span><span class="st">gene.SIM1</span><span class="ch">\"</span><span class="st"> as sim, c.</span><span class="ch">\"</span><span class="st">gene.POMC</span><span class="ch">\"</span><span class="st"> as p, c.</span><span class="ch">\"</span><span class="st">gene.LEPR</span><span class="ch">\"</span><span class="st"> as lpr, c.</span><span class="ch">\"</span><span class="st">gene.MRAP2</span><span class="ch">\"</span><span class="st"> as mr, c.</span><span class="ch">\"</span><span class="st">gene.ADCY3</span><span class="ch">\"</span><span class="st"> as a, c.</span><span class="ch">\"</span><span class="st">gene.NTRK2</span><span class="ch">\"</span><span class="st"> as n, c.</span><span class="ch">\"</span><span class="st">gene.MC4R</span><span class="ch">\"</span><span class="st"> as m, c.</span><span class="ch">\"</span><span class="st">gene.KSR2</span><span class="ch">\"</span><span class="st"> as k, c.</span><span class="ch">\"</span><span class="st">gene.LEP</span><span class="ch">\"</span><span class="st"> as l, c.</span><span class="ch">\"</span><span class="st">gene.PCSK1</span><span class="ch">\"</span><span class="st"> as pc, c.</span><span class="ch">\"</span><span class="st">gene.BDNF</span><span class="ch">\"</span><span class="st"> as b, c.</span><span class="ch">\"</span><span class="st">gene.SH2B1</span><span class="ch">\"</span><span class="st"> as s from cases c, diagnoses d where c.id = d.case_id and year_of_diagnosis is not null) group by year_of_diagnosis ;"</span></span>
@@ -331,7 +327,7 @@ The following genes were checked in the download of the GDC data and if availabl
 </div>
 </div>
 <p>In the graph there is a relation of mutation in genes (red) to the number of diagnoses (blue), however, there are diagnoses without mentioning any gene mutations at all (green) which are included in the overal number of diagnoses (blue). For many other assumptions in this report here also applies that the submissions to GDC are on a free basis and that means there is no statement about the completeness of the data whether the diagnoses are incomplete (missing genes) or there are no mutations.</p>
-<div class="cell" data-execution_count="45">
+<div class="cell" data-execution_count="84">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>dbEngine<span class="op">=</span>sqlalchemy.create_engine(<span class="st">'sqlite:///../data/gdc.sqlite'</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> dbEngine.<span class="ex">connect</span>() <span class="im">as</span> conn:</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    sqlstatement_obese <span class="op">=</span> <span class="st">"select d.*, c.*,</span><span class="ch">\</span></span>
@@ -400,7 +396,7 @@ The following genes were checked in the download of the GDC data and if availabl
 <span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>brfss_gdc[<span class="st">'musclestr2ormore_prob'</span>] <span class="op">=</span> brfss_gdc[<span class="st">'age_range'</span>].<span class="bu">map</span>(musclestr2ormore_prob)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Next graph shows the amount of changes in the specific genes in each age group. Since BRFSS data contains age groups, we relate the two datasets with those groups.</p>
-<div class="cell" data-execution_count="48">
+<div class="cell" data-execution_count="85">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>f<span class="op">=</span>sns.catplot(data<span class="op">=</span>brfss_gdc, x<span class="op">=</span><span class="st">'obesity_mutation_count'</span>, y<span class="op">=</span><span class="st">'age_range'</span>, kind<span class="op">=</span><span class="st">'violin'</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Mutations"</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Age group"</span>)</span>
@@ -418,7 +414,7 @@ The following genes were checked in the download of the GDC data and if availabl
 - musclestr2ormore_prob: Probability of muscle strengthening 2 or more days a week<br>
 - obesity_mutation: Mutations in genes related to obesity (y/n)<br>
 - obesity_mutation_count: Number of mutations in genes related to obesity</p>
-<div class="cell" data-execution_count="57">
+<div class="cell" data-execution_count="86">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>xdf <span class="op">=</span> pd.DataFrame(brfss_gdc, columns<span class="op">=</span>[<span class="st">'age_at_diagnosis_days'</span>, <span class="st">'obesity_prob'</span>, <span class="st">'overweight_prob'</span>, <span class="st">'nophyac_prob'</span>, <span class="st">'musclestr2ormore_prob'</span>, <span class="st">'obesity_mutation'</span>, <span class="st">'obesity_mutation_count'</span>])</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>correlation_df <span class="op">=</span> xdf</span>
@@ -441,7 +437,7 @@ Other combination do not show significant correlation.</p>
 <section id="classification-1" class="level3">
 <h3 class="anchored" data-anchor-id="classification-1">Classification</h3>
 <p>For the classification, the logistic regression is used to classify if there is a mutation in one or more genes related to obesity or not. So, it is a binary classification and the logistic regression is a perfect fit.</p>
-<div class="cell" data-execution_count="55">
+<div class="cell" data-execution_count="87">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>xdf <span class="op">=</span> pd.DataFrame(brfss_gdc, columns<span class="op">=</span>[<span class="st">'age_at_diagnosis_days'</span>, <span class="st">'primary_site'</span>, <span class="st">'disease_type'</span>, <span class="st">'obesity_prob'</span>, <span class="st">'overweight_prob'</span>, <span class="st">'nophyac_prob'</span>, <span class="st">'musclestr2ormore_prob'</span>])</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> onehotEncoding(orig, feature):</span>
@@ -487,7 +483,7 @@ The sampling size is 81 for class=0 and 249 for class=1, so a validation set of 
 <p>The training set is used to train the logistic regression function, the validation set is used to validate the predictions and the test set is kept away from the training phase in order to prevent overfitting.<br>
 The test set would come into play when a model selection would occur. Since there is only one model in the report the test set is not used.</p>
 <p>Further validation of the logistic regression is done by providing the Receiver-Operator-Curve and the Area-Under-Curve value:</p>
-<div class="cell" data-execution_count="56">
+<div class="cell" data-execution_count="88">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">##ROC and AUC</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>y_pred_proba <span class="op">=</span> logreg.predict_proba(x_validation)[::,<span class="dv">1</span>]</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>fpr, tpr, _ <span class="op">=</span> roc_curve(y_validation,  y_pred_proba)</span>
