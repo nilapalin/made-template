@@ -67,6 +67,7 @@ class Test_gdc1a(unittest.TestCase):
                                                                 "edges": [
                                                                     {
                                                                         "node": {
+                                                                            "age_at_diagnosis": 14435,
                                                                             "ajcc_clinical_m": "11",
                                                                             "ajcc_clinical_n": "12",
                                                                             "ajcc_clinical_stage": "13",
@@ -74,11 +75,13 @@ class Test_gdc1a(unittest.TestCase):
                                                                             "ajcc_pathologic_m": "15",
                                                                             "ajcc_pathologic_n": "16",
                                                                             "ajcc_pathologic_stage": "17",
-                                                                            "ajcc_pathologic_t": "18"
+                                                                            "ajcc_pathologic_t": "18",
+                                                                            "year_of_diagnosis": 2012
                                                                         }
                                                                     },
                                                                     {
                                                                         "node": {
+                                                                            "age_at_diagnosis": 14435,
                                                                             "ajcc_clinical_m": "21",
                                                                             "ajcc_clinical_n": "22",
                                                                             "ajcc_clinical_stage": "23",
@@ -86,7 +89,8 @@ class Test_gdc1a(unittest.TestCase):
                                                                             "ajcc_pathologic_m": "25",
                                                                             "ajcc_pathologic_n": "26",
                                                                             "ajcc_pathologic_stage": "27",
-                                                                            "ajcc_pathologic_t": "28"
+                                                                            "ajcc_pathologic_t": "28",
+                                                                            "year_of_diagnosis": 2012
                                                                         }
                                                                     }
                                                                 ]
@@ -94,6 +98,18 @@ class Test_gdc1a(unittest.TestCase):
                                                         },
                                                         "disease_type": "Complex Mixed and Stromal Neoplasms",
                                                         "id": "RUNhc2U6ODg0YjQ0NmItMzNhYy01MGJhLThlNmQtN2FhOWQ4NThhMWI3",
+                                                        "gene": {
+                                                            "hits": {
+                                                                "edges": [
+                                                                    {
+                                                                        "node": {
+                                                                        "biotype": null,
+                                                                        "symbol": "LEP"
+                                                                        }
+                                                                    }
+                                                                ]
+                                                            }
+                                                        },
                                                         "index_date": "Diagnosis",
                                                         "primary_site": "Kidney"
                                                     }
@@ -115,6 +131,18 @@ class Test_gdc1a(unittest.TestCase):
         expected_case_dict['index_date'] = "Diagnosis"
         expected_case_dict['primary_site'] = "Kidney"
         expected_case_dict['disease_type'] = "Complex Mixed and Stromal Neoplasms"
+        expected_case_dict['gene.SIM1'] = False
+        expected_case_dict['gene.POMC'] = False 
+        expected_case_dict['gene.LEPR'] = False
+        expected_case_dict['gene.MRAP2'] = False
+        expected_case_dict['gene.ADCY3'] = False
+        expected_case_dict['gene.NTRK2'] = False
+        expected_case_dict['gene.MC4R'] = False
+        expected_case_dict['gene.KSR2'] = False
+        expected_case_dict['gene.LEP'] = True
+        expected_case_dict['gene.PCSK1'] = False
+        expected_case_dict['gene.BDNF'] = False
+        expected_case_dict['gene.SH2B1'] = False
         expected_cases = [expected_case_dict]
 
         expected_demographic_dict={}
@@ -131,6 +159,9 @@ class Test_gdc1a(unittest.TestCase):
 
         expected_diagnosis_dict1={}
         expected_diagnosis_dict1['case_id'] = "RUNhc2U6ODg0YjQ0NmItMzNhYy01MGJhLThlNmQtN2FhOWQ4NThhMWI3"
+        expected_diagnosis_dict1['year_of_diagnosis'] = 2012
+        expected_diagnosis_dict1['age_at_diagnosis_days'] = 14435
+        expected_diagnosis_dict1['age_at_diagnosis_years'] = 40
         expected_diagnosis_dict1['ajcc_clinical_m']="11"
         expected_diagnosis_dict1['ajcc_clinical_t']="14"
         expected_diagnosis_dict1['ajcc_clinical_n']="12"
@@ -141,6 +172,9 @@ class Test_gdc1a(unittest.TestCase):
         expected_diagnosis_dict1['ajcc_pathologic_stage']="17"
         expected_diagnosis_dict2={}
         expected_diagnosis_dict2['case_id'] = "RUNhc2U6ODg0YjQ0NmItMzNhYy01MGJhLThlNmQtN2FhOWQ4NThhMWI3"
+        expected_diagnosis_dict2['year_of_diagnosis'] = 2012
+        expected_diagnosis_dict2['age_at_diagnosis_days'] = 14435
+        expected_diagnosis_dict2['age_at_diagnosis_years'] = 40
         expected_diagnosis_dict2['ajcc_clinical_m']="21"
         expected_diagnosis_dict2['ajcc_clinical_t']="24"
         expected_diagnosis_dict2['ajcc_clinical_n']="22"

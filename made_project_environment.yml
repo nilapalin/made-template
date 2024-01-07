@@ -1,0 +1,13 @@
+name: MADE_PROJECT
+channels:
+  - defaults
+dependencies:
+    - numpy
+    - pandas
+    - sqlalchemy
+    - matplotlib
+    - python
+    - nodejs
+    - jupyter
+    - seaborn
+    - scikit-learn

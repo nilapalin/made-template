@@ -107,6 +107,79 @@ Evaluation:
     https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6226269/ MC4R and LEPR
     MC4R (melanocortin 4 receptor): https://portal.gdc.cancer.gov/genes/ENSG00000166603
     https://de.wikipedia.org/wiki/Melanocortin-4-Rezeptor 'Ferner unterdrückt er das Hungergefühl'
-        
+
+Problem:
+Even though the GDC Datasource has a field for exposure weight or BMI, it is not filled in any of their datasets. Therefore, it is not possible to link the obesity numbers of BRFSS dataset to the cancer in general. For this report, a deeper evaluation is used and hence the following assumption is used:
+- Genes MC4R and LEPR are involved in exposure of obesity
+- Cancer with documented mutations in MC4R and LEPR could be associated to obesity
+This are very weak assumptions and I would highly value if there would be a possibility in furture to either add obesity identifying data (like BMI) to cancer data or to make it possible to connect datasets (like in other studies e.g. NAKO (Nationale Gesundheitsstudie) which is not open data)
+
+Also the GDC data is from different countries (united states, canada, ...). Since a lot of data sets are without any specification on that field (country of residence at enrollment), for reasons of ease for that project this is ignored. (TODO: check)
+
+Changes in genes can be harmful but can also be without or with low consequences. Therefore a further view could be to evaluate the impact of the DNA changes.
+
+All the evaluation is not complete since it is on data which potentially be incomplete since the projects are not forced to deliver. In Germany there is a law for delivering cancer related data, however, it only contains a very limited subset of information which GDC is providing.
+
+
+Hypothesis:
+If we can see changes in the values of obesity in every year, this will be somehow reflected in the cancer numbers (esp. with the MC4R and LEPR mutations).
+1. show changing data in obesity within brfss data of the last 10 or so years
+    LocationDesc == National
+    Class == Obesity / Weight Status
+    Total == Total
+
+    LocationDesc == National
+    Class == Obesity / Weight Status
+    Gender == Male or Female
+
+    LocationDesc == National
+    Class == Obesity / Weight Status
+    Age(years) == 25 - 34 or 35 - 44 or 45 - 54 or 55 - 64 or 65 or older
+
+   
+2. show data of cancer cases with and without mutations from gdc over the last 10 or so years (MC4R mutations only relevant 2010-2018)    
+
+3. bring 1. and 2. together and show possible correlations
+
+Problem: no information of completeness in gdc data -> cancer registries
+therefore use the outcome with caution and carefulness
+
+Do a classification task:
+Features (X):
+brfss.age_group.obesity
+brfss.age_group.overweight
+brfss.age_group.physical training
+gdc.case.age_at_diagnosis
+gdc.case.gene mutations
+(gdc.case.pTNM.T/N/M)
+
+Classification (y):
+specific gene mutated (binary classification)
+or primary_site of cancer (multi-class classification)
+or disease_type (multi-class classification)
+
+Data: use data from year 2011 which is available in both brfss and gdc
+
+Ressource for Logistic Regression and nice seaborn plots:
+https://medium.com/analytics-vidhya/logistic-regression-in-python-using-pandas-and-seaborn-for-beginners-in-ml-64eaf0f208d2
+
+
+4. add more genes to the bin:
+    https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8459824/
+    SIM1
+    POMC
+    LEPR
+    MRAP2
+    ADCY3
+    NTRK2
+    MC4R
+    KSR2
+    LEP
+    PCSK1
+    BDNF
+    SH2B1
+
+Interpretation classification report:
+https://databasecamp.de/statistik/f1-score
 
 -->

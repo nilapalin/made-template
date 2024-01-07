@@ -6,3 +6,8 @@
 package-lock.json
 **/*.sqlite
 **/__pycache__
+project/data/brfss_files/*
+project/data/brfss.html
+project/project-plan_files/*
+project/project-plan.html
+project/report_files/*
