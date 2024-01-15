@@ -16,7 +16,9 @@ The hypotheses for this project are:
 
 The report supports both hypotheses. A classification is done on the final report to classify whether there are certain mutations in genes related to obesity combining both data sources.
 
-For more information, see the [final report](project/report.ipynb)
+For more information, see the   
+- [final report](project/report.ipynb)
+- [slides](project/slides.pdf)  
 
 ## Exercises
 Exercises were submitted during the couse and stored within the *exercise* folder.
