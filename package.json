@@ -6,6 +6,6 @@
         "url": "https://github.com/nilapalin/made-template"
     },
     "dependencies": {
-        "@jvalue/jayvee-interpreter": "^0.1.0"
+        "@jvalue/jayvee-interpreter": "^0.2.0"
     }
 }
